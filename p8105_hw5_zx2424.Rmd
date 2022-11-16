@@ -28,7 +28,7 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
-Problem 1
+## Problem 1
 Iterate over file names and read in data for each subject and save the results as a new variable full_df.
 ```{r}
 full_df = 
@@ -65,5 +65,16 @@ tidy_df %>%
   geom_path() + 
   facet_grid(~group)
 ```
+
+## Problem 2
+Import the data and create a city_state variable.
+```{r}
+homicide = read_csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv") %>%
+  janitor::clean_names() %>%
+  mutate(city_state = str_c(city, sep = ",", state)) %>%
+  mutate(solved_or_not = ifelse(disposition == "Closed by arrest", "1", "0")) %>%
+  mutate(solved_or_not = fct(solved_or_not)) 
+```
+
 
 
