@@ -92,10 +92,17 @@ total_and_unsolved =
          unsolved = unsolved_df)
   }
 
-homicide_nest %>%
+n_total_unsolved = 
+  homicide_nest %>%
   mutate(model1 = map(homicide_nest$data, total_and_unsolved)) %>%
   unnest(model1) %>%
   select(-data)
+
+n_total_unsolved
+```
+
+```{r}
+prop.test(homicide_nest$data[[3]])
 ```
 
 
