@@ -29,7 +29,14 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
 Problem 1
+Iterate over file names and read in data for each subject and save the results as a new variable full_df.
 ```{r}
-
+full_df = 
+  tibble(
+    files = list.files("./data/"),
+    path = str_c("./data/", files) ) %>% 
+  mutate(data = map(path, read_csv)) %>% 
+  unnest(cols = c(data))
 ```
+
 
