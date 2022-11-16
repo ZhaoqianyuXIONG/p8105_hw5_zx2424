@@ -72,9 +72,30 @@ Import the data and create a city_state variable.
 homicide = read_csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv") %>%
   janitor::clean_names() %>%
   mutate(city_state = str_c(city, sep = ",", state)) %>%
-  mutate(solved_or_not = ifelse(disposition == "Closed by arrest", "1", "0")) %>%
-  mutate(solved_or_not = fct(solved_or_not)) 
+  mutate(status = ifelse(disposition == "Closed by arrest", "0", "1")) %>%
+  mutate(status = as.integer(status)) 
 ```
 
+Summarize within cities to obtain the total number of homicides and the number of unsolved homicides.
+```{r}
+homicide_nest = 
+  homicide %>%
+  select(city_state, status) %>%
+  nest(data = status)
+
+total_and_unsolved = 
+  function(df){
+    total_df = as.integer(count(df))
+    unsolved_df = sum(df)
+    
+    tibble(total = total_df,
+         unsolved = unsolved_df)
+  }
+
+homicide_nest %>%
+  mutate(model1 = map(homicide_nest$data, total_and_unsolved)) %>%
+  unnest(model1) %>%
+  select(-data)
+```
 
 
