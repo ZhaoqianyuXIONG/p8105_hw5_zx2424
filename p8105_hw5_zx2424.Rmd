@@ -102,7 +102,12 @@ n_total_unsolved
 ```
 
 ```{r}
-prop.test(homicide_nest$data[[3]])
+output_Baltimore = 
+prop.test(x = n_total_unsolved$unsolved[3], n = n_total_unsolved$total[3]) %>%
+  broom::tidy() %>%
+  select(estimate, starts_with("conf"))
+
+output_Baltimore 
 ```
 
 
