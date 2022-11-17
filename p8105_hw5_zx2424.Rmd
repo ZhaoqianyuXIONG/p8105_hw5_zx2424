@@ -132,3 +132,16 @@ n_total_unsolved %>%
 prop_df
 ```
 
+Create a plot that shows the estimated unsolved homicide proportions and CIs for each city.
+```{r}
+ prop_df %>%
+  mutate(city_state = fct_reorder(city_state, estimate)) %>%
+  ggplot(aes(x = city_state, y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+  labs(title = "Estimates and CI for each city",
+       x = "City, State",
+       y = "Estimate proportions (with CI)") 
+```
+
