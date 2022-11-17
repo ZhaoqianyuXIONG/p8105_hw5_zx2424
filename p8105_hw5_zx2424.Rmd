@@ -154,3 +154,17 @@ Create a plot that shows the estimated unsolved homicide proportions and CIs for
        y = "Estimate proportions (with CI)") 
 ```
 
+## Problem 3
+Write a function to get estimate and p.value of the sample.
+```{r}
+sim_mean_p = function(n, mu = 0, sigma = 5){
+  sim_data = tibble(
+    x = rnorm(n, mean = mu, sd = sigma),
+  )
+  t.test(sim_data) %>%
+    broom::tidy() %>%
+    select(estimate, p.value)
+}
+```
+
+
