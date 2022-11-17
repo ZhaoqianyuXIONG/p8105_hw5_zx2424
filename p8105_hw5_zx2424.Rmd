@@ -101,6 +101,7 @@ n_total_unsolved =
 n_total_unsolved
 ```
 
+Estimate the proportion of unsolved homicides for Baltimore, MD.
 ```{r}
 output_Baltimore = 
 prop.test(x = n_total_unsolved$unsolved[3], n = n_total_unsolved$total[3]) %>%
@@ -110,4 +111,12 @@ prop.test(x = n_total_unsolved$unsolved[3], n = n_total_unsolved$total[3]) %>%
 output_Baltimore 
 ```
 
-
+Write a function that can generate the results -- estimated proportion and confidence interval.
+```{r}
+p_and_CI =
+  function(x, n) {
+     prop.test(x, n) %>%
+      broom::tidy() %>%
+      select(estimate, starts_with("conf"))
+  }
+```
