@@ -225,8 +225,20 @@ power_mean %>%
   geom_smooth()
 ```
 
+Make a plot showing the average estimate of mean.
 ```{r}
+average_estimate = 
+  function(df){
+    mean_estimate = mean(df[["estimate"]])
+    mean_estimate
+  }
 
+nest_sim_df %>%
+  mutate(mu_estimate = map(nest_sim_df$data, average_estimate)) %>%
+  unnest(mu_estimate) %>%
+  ggplot(aes(x = true_mean, y = mu_estimate)) +
+  geom_point() +
+  geom_line()
 ```
 
 
