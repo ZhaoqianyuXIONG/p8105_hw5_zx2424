@@ -241,5 +241,21 @@ nest_sim_df %>%
   geom_line()
 ```
 
+Make a second plot showing the average estimate of mean only in samples for which the null was rejected.
+```{r}
+reject_df = 
+  sim_df %>%
+  filter(p.value < 0.05) %>%
+  select(-sample_size, -iter, -p.value) %>%
+  nest(data = (estimate))
 
+reject_df %>%
+  mutate(mu_estimate = map(reject_df$data, average_estimate)) %>%
+  unnest(mu_estimate) %>%
+  ggplot(aes(x = true_mean, y = mu_estimate)) +
+  geom_point() +
+  geom_line()
+```
+
+From two plots, we can see that the sample average estimate of mean only in samples for which the null was rejected not approximately equal to the true value of mean. Because the samples deleted are only in one direction, that means their estimate mean is smaller than true mean. But the ones that have higher value of estimate mean are reserved. So especially for those whose true mean are close to 0, the sample average estimate of mean only in samples for which the null was rejected is higher than true mean.
 
