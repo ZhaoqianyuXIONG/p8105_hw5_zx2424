@@ -196,4 +196,38 @@ sim_df =
   unnest(estimate_df) 
 ```
 
+Make a plot showing the proportion of times the null was rejected. It can be seen that the further the true_mean is away from 0, the higher is its power.
+```{r}
+nest_sim_df = 
+sim_df %>%
+  select(-sample_size, -iter) %>%
+  nest(data = estimate:p.value)
+
+test_power = 
+  function(df){
+    n_reject_df = df %>%
+      filter(p.value < 0.05) %>%
+      count()
+    n_reject = as.integer(n_reject_df)
+    power = n_reject/5000
+    power
+    }
+
+power_mean = 
+  nest_sim_df %>%
+  mutate(power = map(nest_sim_df$data, test_power)) %>%
+  unnest(power) %>%
+  select(-data)
+
+power_mean %>%
+  ggplot(aes(x = true_mean, y = power)) +
+  geom_point() +
+  geom_smooth()
+```
+
+```{r}
+
+```
+
+
 
