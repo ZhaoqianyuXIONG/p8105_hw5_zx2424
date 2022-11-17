@@ -184,22 +184,16 @@ sim_results_df
 
 Repeat the above for $\mu = \{1, 2, 3, 4, 5, 6\}$.
 ```{r}
-mean_list = 
-  list(
-    "mean_1" = 1,
-    "mean_2" = 2,
-    "mean_3" = 3,
-    "mean_4" = 4,
-    "mean_5" = 5,
-    "mean_6" = 6
-  )
-
-output = vector("list", length = 6)
-
-for (i in 1:6) {
-  output[[i]] = rerun(5000, sim_mean_p(mu = mean_list[[i]])) %>%
-  bind_rows
-}
+sim_df = 
+  expand.grid(
+    sample_size = 30,
+    true_mean = c(1, 2, 3, 4, 5, 6),
+    iter = 1:5000
+  ) %>%
+  mutate(
+    estimate_df = map2(.x = sample_size, .y = true_mean, ~sim_mean_p(n = .x, mu = .y))
+  ) %>%
+  unnest(estimate_df) 
 ```
 
 
