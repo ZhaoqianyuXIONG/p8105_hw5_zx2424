@@ -120,3 +120,15 @@ p_and_CI =
       select(estimate, starts_with("conf"))
   }
 ```
+
+Create a tidy dataframe with estimated proportions and CIs for each city.
+```{r}
+prop_df = 
+n_total_unsolved %>%
+  mutate(model2 = map2(.x = unsolved, .y = total, ~p_and_CI(x = .x, n = .y))) %>%
+  unnest(model2) %>%
+  select(-total, -unsolved)
+
+prop_df
+```
+
